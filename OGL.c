@@ -46,6 +46,8 @@ int initialize(void)
 		0.0f,									//blue
 		1.0f 									//alpha
 	);
+	// Enable depth testing
+    glEnable(GL_DEPTH_TEST);
 
 	return(0);
 }
@@ -54,12 +56,22 @@ void resize(int width, int height)
 {
 	// code
 	glViewport(0, 0, width, height);
+	// Set up the projection matrix for 3D viewing
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluPerspective(45.0, (double)width / (double)height, 1.0, 200.0); // FOV, aspect ratio, near and far planes
+    glMatrixMode(GL_MODELVIEW); // Switch back to modelview matrix
 }
 
 void display(void)
 {
 	// code
-	glClear(GL_COLOR_BUFFER_BIT);
+	//------------------------DRAW--------------------------
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	// Load the identity matrix to reset transformations
+    glLoadIdentity();
+	glTranslatef(0.0f, 0.0f, -10.0f);
 
 	glBegin(GL_TRIANGLES);
 	glColor3f(1.0f, 0.0f, 0.0f);
@@ -71,6 +83,7 @@ void display(void)
 	glEnd();
 
 	glutSwapBuffers();
+	glutPostRedisplay();
 }
 
 void keyboard(unsigned char key, int x, int y)
