@@ -3,7 +3,7 @@
 
 // global variable declarations
 BOOL bFullScreen = FALSE;
-
+float angle = 0.0f;
 // Entry-point function
 int main(int argc, char* argv[])
 {
@@ -71,16 +71,64 @@ void display(void)
 
 	// Load the identity matrix to reset transformations
     glLoadIdentity();
+
 	glTranslatef(0.0f, 0.0f, -10.0f);
 
-	glBegin(GL_TRIANGLES);
+	if(angle < 360.0f)
+		angle = angle + 0.1f;
+	else  
+		angle = 0.0f;
+			
+	glRotatef(angle, 1.0f, 0.0f, 0.0f);
+	glRotatef(angle, 0.0f, 1.0f, 0.0f);
+	glRotatef(angle, 0.0f, 0.0f, 1.0f);
+
+	// Draw the cube with separate colors for each face
+	glBegin(GL_QUADS);  // Draw each face of the cube as a quadrilateral
+
+	// Front face (Red)
 	glColor3f(1.0f, 0.0f, 0.0f);
-	glVertex3f(0.0f, 1.0f, 0.0f);
+	glVertex3f(-1.0f, -1.0f,  1.0f);  // Bottom-left
+	glVertex3f( 1.0f, -1.0f,  1.0f);  // Bottom-right
+	glVertex3f( 1.0f,  1.0f,  1.0f);  // Top-right
+	glVertex3f(-1.0f,  1.0f,  1.0f);  // Top-left
+
+	// Back face (Green)
 	glColor3f(0.0f, 1.0f, 0.0f);
-	glVertex3f(-1.0f, -1.0f, 0.0f);
+	glVertex3f(-1.0f, -1.0f, -1.0f);  // Bottom-left
+	glVertex3f(-1.0f,  1.0f, -1.0f);  // Top-left
+	glVertex3f( 1.0f,  1.0f, -1.0f);  // Top-right
+	glVertex3f( 1.0f, -1.0f, -1.0f);  // Bottom-right
+
+	// Top face (Blue)
 	glColor3f(0.0f, 0.0f, 1.0f);
-	glVertex3f(1.0f, -1.0f, 0.0f);
-	glEnd();
+	glVertex3f(-1.0f,  1.0f, -1.0f);  // Back-left
+	glVertex3f(-1.0f,  1.0f,  1.0f);  // Front-left
+	glVertex3f( 1.0f,  1.0f,  1.0f);  // Front-right
+	glVertex3f( 1.0f,  1.0f, -1.0f);  // Back-right
+
+	// Bottom face (Yellow)
+	glColor3f(1.0f, 1.0f, 0.0f);
+	glVertex3f(-1.0f, -1.0f, -1.0f);  // Back-left
+	glVertex3f( 1.0f, -1.0f, -1.0f);  // Back-right
+	glVertex3f( 1.0f, -1.0f,  1.0f);  // Front-right
+	glVertex3f(-1.0f, -1.0f,  1.0f);  // Front-left
+
+	// Right face (Cyan)
+	glColor3f(0.0f, 1.0f, 1.0f);
+	glVertex3f( 1.0f, -1.0f, -1.0f);  // Bottom-front
+	glVertex3f( 1.0f,  1.0f, -1.0f);  // Top-front
+	glVertex3f( 1.0f,  1.0f,  1.0f);  // Top-back
+	glVertex3f( 1.0f, -1.0f,  1.0f);  // Bottom-back
+
+	// Left face (Magenta)
+	glColor3f(1.0f, 0.0f, 1.0f);
+	glVertex3f(-1.0f, -1.0f, -1.0f);  // Bottom-back
+	glVertex3f(-1.0f, -1.0f,  1.0f);  // Bottom-front
+	glVertex3f(-1.0f,  1.0f,  1.0f);  // Top-front
+	glVertex3f(-1.0f,  1.0f, -1.0f);  // Top-back
+
+	glEnd();  // End drawing the cube face
 
 	glutSwapBuffers();
 	glutPostRedisplay();
